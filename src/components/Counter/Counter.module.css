@@ -1,0 +1,22 @@
+.counter {
+    width: 100px;
+    height: 100px;
+    margin: 100px auto 0 auto;
+    background-color: lightblue;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+
+.display {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
