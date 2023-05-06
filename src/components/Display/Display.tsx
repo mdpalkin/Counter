@@ -4,16 +4,17 @@ import s from "./Display.module.css"
 
 type DisplayPropsType = {
     count: number
-    maxCount: number
+    displayError: boolean
+    alarm: string
 }
 
 const Display = (props: DisplayPropsType) => {
 
-    const style = props.count === props.maxCount ? s.error : s.fine
-
+    const style = s.display + (props.displayError ? " " + s.error : " " + s.fine)
+    const numberStyle = !props.alarm ? s.number : ""
     return (
-        <div className={style}>
-            {props.count}
+        <div className={`${style} ${numberStyle}`}>
+            {props.alarm || props.count}
         </div>
     );
 };

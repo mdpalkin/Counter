@@ -1,28 +1,50 @@
 import React from 'react';
 import s from './Setter.module.css'
 import SuperButton from "../SuperButton/SuperButton";
-import SetValue from "./setValue/setValue";
+import ValueSettings from "./ValueSettings/ValueSettings";
 
 type SetterType = {
     setMaxCount: (num: number) => void
-    setCounter: (num: number) => void
+    setMinCount: (num: number) => void
+    minCount: number
+    maxCount: number
     setButtonTitle: string
+    temporaryMin: number
+    temporaryMax: number
+    isBtnAble: boolean
+    setTemporaryMin: (num: number) => void
+    setTemporaryMax: (num: number) => void
+    setIsBtnDisable: (bool: boolean) => void
+    setHandler: () => void
+    setAlarm: (text: string) => void
+    temporaryMinError: boolean
+    temporaryMaxError: boolean
+
 }
 
 const Setter = (props: SetterType) => {
-
-    const test = () => {
-        props.setMaxCount(6)
-    }
-
-    let min = 0
-
-
     return (
-        <div className={s.setter}>
-            <SetValue title={"min value"} forChange={min}/>
-            <SuperButton title={props.setButtonTitle} onClick={test} isDisabled={false}/>
-        </div>
+            <div className={s.setter}>
+                <div className={s.inputsWrapper}>
+                <ValueSettings title={"max value"} temporary={props.temporaryMax}
+                               setTemporary={props.setTemporaryMax}
+                               setIdBtnDisable={props.setIsBtnDisable}
+                               setAlarm={props.setAlarm}
+                               error={props.temporaryMaxError}
+                />
+                <ValueSettings title={"min value"}
+                               temporary={props.temporaryMin}
+                               setTemporary={props.setTemporaryMin}
+                               setIdBtnDisable={props.setIsBtnDisable}
+                               setAlarm={props.setAlarm}
+                               error={props.temporaryMinError}
+                />
+                </div>
+                <div className={s.buttonWrapper}>
+                <SuperButton title={props.setButtonTitle} onClick={props.setHandler} isDisabled={props.isBtnAble}/>
+                </div>
+            </div>
+
     );
 };
 

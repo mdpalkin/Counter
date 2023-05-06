@@ -9,15 +9,11 @@ type SuperButtonType = {
 }
 
 const SuperButton = (props: SuperButtonType) => {
-
-    const onClickHandler = () => props.onClick()
-
-
     return (
         <div>
             <button
                 className={s.btn}
-                onClick={onClickHandler}
+                onClick={() => props.onClick()}
                 disabled={props.isDisabled}>
                 {props.title}</button>
         </div>

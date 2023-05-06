@@ -1,0 +1,33 @@
+.numberInput {
+    width: 230px;
+    height: 40px;
+    border-radius: 7px;
+    border: 2px rgb(152,216,233) solid;
+    background-color: white;
+    text-align: center;
+    font-size: 30px;
+}
+.numberInput:focus {
+    caret-color: transparent;
+    border: 2px rgb(152,216,233) solid;
+}
+
+.error {
+    background-color: rgb(227,38,54);
+    border: 2px rgb(227,38,54) solid;
+    color: white;
+}
+.error:focus {
+    outline: none;
+    border: 2px rgb(227,38,54) solid;
+
+}
+.wrapper {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    justify-content: space-between;
+    color: rgb(152,216,233);
+    font-size: 35px;
+    padding: 30px 20px;
+}
