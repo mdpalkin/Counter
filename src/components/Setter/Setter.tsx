@@ -1,47 +1,76 @@
-import React, {memo} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import s from './Setter.module.css'
 import SuperButton from "../SuperButton/SuperButton";
 import ValueSettings from "./ValueSettings/ValueSettings";
+import {useDispatch, useSelector} from "react-redux";
+import {rootStateType} from "../../redux/store";
+import {temporaryMaxSelector, temporaryMinSelector} from "../../redux/selectors";
+import {
+    setAlarm,
+    setMaxCount,
+    setMinCount,
+    setTemporaryMax,
+    setTemporaryMin
+} from "../../redux/reducers/counter-reducer";
 
-type SetterType = {
-    setMaxCount: (num: number) => void
-    setMinCount: (num: number) => void
-    minCount: number
-    maxCount: number
-    setButtonTitle: string
-    temporaryMin: number
-    temporaryMax: number
-    isBtnAble: boolean
-    setTemporaryMin: (num: number) => void
-    setTemporaryMax: (num: number) => void
-    setIsBtnDisable: (bool: boolean) => void
-    setButtonHandler: () => void
-    setAlarm: (text: string) => void
-    temporaryMinError: boolean
-    temporaryMaxError: boolean
 
-}
+const Setter = memo(() => {
 
-const Setter = memo((props: SetterType) => {
+    const [isSetDisabled, setIsSetDisabled] = useState(true)
+
+    const temporaryMin = useSelector<rootStateType, number>(temporaryMinSelector)
+    const temporaryMax = useSelector<rootStateType, number>(temporaryMaxSelector)
+
+    const dispatch = useDispatch()
+
+    const temporaryMinError = temporaryMin < 0 || temporaryMin >= temporaryMax
+    const temporaryMaxError = temporaryMax <= temporaryMin
+
+    const setupAlarm = useCallback((alarm: string) => {
+        dispatch(setAlarm(alarm))
+    }, [dispatch])
+
+    useEffect(()=> {
+    if (temporaryMaxError || temporaryMinError) {
+        setIsSetDisabled(true)
+        setupAlarm("Incorrect value!")
+    }}, [dispatch, setupAlarm, temporaryMinError, temporaryMaxError]
+    )
+
+    const setButtonHandler = useCallback(() => {
+        dispatch(setMaxCount(temporaryMax))
+        dispatch(setMinCount(temporaryMin))
+        setIsSetDisabled(true)
+        dispatch(setAlarm(""))
+    }, [dispatch, temporaryMin, temporaryMax])
+
+    const setupTemporaryMin = useCallback((newTemporaryMin: number) => {
+        dispatch(setTemporaryMin(newTemporaryMin))
+    }, [dispatch])
+
+    const setupTemporaryMax = useCallback((newTemporaryMax: number) => {
+        dispatch(setTemporaryMax(newTemporaryMax))
+    }, [dispatch])
+
     return (
             <div className={s.setter}>
                 <div className={s.inputsWrapper}>
-                <ValueSettings title={"max value"} temporary={props.temporaryMax}
-                               setTemporary={props.setTemporaryMax}
-                               setIdBtnDisable={props.setIsBtnDisable}
-                               setAlarm={props.setAlarm}
-                               error={props.temporaryMaxError}
+                <ValueSettings title={"max value"} temporary={temporaryMax}
+                               setTemporary={setupTemporaryMax}
+                               setIdBtnDisable={setIsSetDisabled}
+                               setAlarm={setupAlarm}
+                               error={temporaryMaxError}
                 />
                 <ValueSettings title={"min value"}
-                               temporary={props.temporaryMin}
-                               setTemporary={props.setTemporaryMin}
-                               setIdBtnDisable={props.setIsBtnDisable}
-                               setAlarm={props.setAlarm}
-                               error={props.temporaryMinError}
+                               temporary={temporaryMin}
+                               setTemporary={setupTemporaryMin}
+                               setIdBtnDisable={setIsSetDisabled}
+                               setAlarm={setupAlarm}
+                               error={temporaryMinError}
                 />
                 </div>
                 <div className={s.buttonWrapper}>
-                <SuperButton title={props.setButtonTitle} onClick={props.setButtonHandler} isDisabled={props.isBtnAble}/>
+                <SuperButton title={"set"} onClick={setButtonHandler} isDisabled={isSetDisabled}/>
                 </div>
             </div>
 
