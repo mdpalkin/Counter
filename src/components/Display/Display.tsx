@@ -9,7 +9,6 @@ type DisplayPropsType = {
 }
 
 const Display = (props: DisplayPropsType) => {
-
     const style = s.display + (props.displayError ? " " + s.error : " " + s.fine)
     const numberStyle = !props.alarm ? s.number : ""
     return (

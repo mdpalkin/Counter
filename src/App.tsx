@@ -1,58 +1,83 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import Counter from "./components/Counter/Counter";
 import Setter from "./components/Setter/Setter";
+import {useDispatch, useSelector} from "react-redux";
+import {
+    setAlarm,
+    setCurrentCount,
+    setIsButtonDisable,
+    setMaxCount,
+    setMinCount,
+    setTemporaryMax,
+    setTemporaryMin
+} from "./redux/reducers/counter-reducer";
+import {rootStateType} from "./redux/store";
 
 function App() {
-    // State
-    const [minCount, setMinCount] = useState(0)
-    const [maxCount, setMaxCount] = useState(5)
-    const [counter, setCounter] = useState(0)
-    const [alarm, setAlarm] = useState("")
-    const [temporaryMin, setTemporaryMin] = useState(minCount)
-    const [temporaryMax, setTemporaryMax] = useState(maxCount)
-    const [isBtnDisable, setIsBtnDisable] = useState(true)
+    console.log('app')
+    const minCount = useSelector<rootStateType, number>(state => state.counter.minCount)
+    const maxCount = useSelector<rootStateType, number>(state => state.counter.maxCount)
+    const currentCount = useSelector<rootStateType, number>(state => state.counter.currentCount)
+    const temporaryMin = useSelector<rootStateType, number>(state => state.counter.temporaryMin)
+    const temporaryMax = useSelector<rootStateType, number>(state => state.counter.temporaryMax)
+    const isBtnDisable = useSelector<rootStateType, boolean>(state => state.counter.isBtnDisable)
+    const alarm = useSelector<rootStateType, string>(state => state.counter.alarm)
 
-
-    //Local storage
-    useEffect(() => {
-        let minValue = localStorage.getItem("MinCounterValue")
-        let maxValue = localStorage.getItem("MaxCounterValue")
-        if (minValue && maxValue) {
-            setMinCount(+JSON.parse(minValue))
-            setMaxCount(+JSON.parse(maxValue))
-            setTemporaryMin(+JSON.parse(minValue))
-            setTemporaryMax(+JSON.parse(maxValue))
-        }
-    }, [])
-
-    useEffect(() => {
-        localStorage.setItem("MinCounterValue", JSON.stringify(minCount))
-        localStorage.setItem("MaxCounterValue", JSON.stringify(maxCount))
-    }, [minCount, maxCount])
+    const dispatch = useDispatch()
 
     // Buttons Functions
-    const increment = () => {
-        counter < maxCount && setCounter(counter + 1)
-    }
-    const reset = () => {
-        setCounter(minCount)
-    }
-    const set = () => {
-        setMaxCount(temporaryMax)
-        setMinCount(temporaryMin)
-        setIsBtnDisable(true)
-        setAlarm("")
-    }
+    const increment = useCallback(() => {
+        currentCount < maxCount && dispatch(setCurrentCount(currentCount + 1))
+    }, [dispatch, currentCount, maxCount])
+
+    const reset = useCallback(() => {
+        dispatch(setCurrentCount(minCount))
+    }, [dispatch, minCount])
+
+    const setButtonHandler = useCallback(() => {
+        dispatch(setMaxCount(temporaryMax))
+        dispatch(setMinCount(temporaryMin))
+        dispatch(setIsButtonDisable(true))
+        dispatch(setAlarm(""))
+    }, [dispatch, temporaryMin, temporaryMax])
+
+
+    // Intermediary functions
+    const setupTemporaryMin = useCallback((newTemporaryMin: number) => {
+        dispatch(setTemporaryMin(newTemporaryMin))
+    }, [dispatch])
+
+    const setupTemporaryMax = useCallback((newTemporaryMax: number) => {
+        dispatch(setTemporaryMax(newTemporaryMax))
+    }, [dispatch])
+
+    const setupIsBtnDisable = useCallback((newValue: boolean) => {
+        dispatch(setIsButtonDisable(newValue))
+    }, [dispatch])
+
+    const setupAlarm = useCallback((alarm: string) => {
+        dispatch(setAlarm(alarm))
+    }, [dispatch])
+
+    const setupMaxCount = useCallback((newMaxCount: number) => {
+        dispatch(setMaxCount(newMaxCount))
+    }, [dispatch])
+
+    const setupMinCount = useCallback((newMinCount: number) => {
+        dispatch(setMinCount(newMinCount))
+    }, [dispatch])
 
     // Counter Value Control
-    if (counter < minCount || counter > maxCount) {
-        setCounter(minCount)
-    }
+    useEffect(() => {
+        if (currentCount !== minCount || currentCount > maxCount) {
+            dispatch(setCurrentCount(minCount))
+        }
+    }, [maxCount, minCount, dispatch])
 
     // Is buttons able?
-    const isIncDisabled = counter === maxCount || !isBtnDisable
-    const isResetDisabled = counter === minCount || !isBtnDisable
+    const isIncDisabled = currentCount === maxCount || !isBtnDisable
+    const isResetDisabled = currentCount === minCount || !isBtnDisable
     let isSetDisabled = isBtnDisable
 
     //Titles
@@ -70,16 +95,15 @@ function App() {
         isSetDisabled = true
         textAlarm = "Incorrect value!"
     }
-    const displayError = (counter === maxCount && !textAlarm)|| textAlarm === "Incorrect value!"
+    const displayError = (currentCount === maxCount && !textAlarm) || textAlarm === "Incorrect value!"
 
     return (
         <div className={"wrapper"}>
             <Counter
                 isResetDisabled={isResetDisabled}
-                IsIncDisabled={isIncDisabled}
+                isIncDisabled={isIncDisabled}
                 reset={reset}
-                count={counter}
-                setCount={setCounter}
+                count={currentCount}
                 increment={increment}
                 incButtonTitle={incButtonTitle}
                 resetButtonTitle={resetButtonTitle}
@@ -88,19 +112,19 @@ function App() {
 
             />
             <Setter
-                setMaxCount={setMaxCount}
-                setMinCount={setMinCount}
+                setMaxCount={setupMaxCount}
+                setMinCount={setupMinCount}
                 setButtonTitle={setButtonTitle}
                 maxCount={maxCount}
                 minCount={minCount}
                 temporaryMin={temporaryMin}
                 temporaryMax={temporaryMax}
                 isBtnAble={isSetDisabled}
-                setTemporaryMin={setTemporaryMin}
-                setTemporaryMax={setTemporaryMax}
-                setIsBtnDisable={setIsBtnDisable}
-                setHandler={set}
-                setAlarm={setAlarm}
+                setTemporaryMin={setupTemporaryMin}
+                setTemporaryMax={setupTemporaryMax}
+                setIsBtnDisable={setupIsBtnDisable}
+                setButtonHandler={setButtonHandler}
+                setAlarm={setupAlarm}
                 temporaryMinError={temporaryMinError}
                 temporaryMaxError={temporaryMaxError}
             />

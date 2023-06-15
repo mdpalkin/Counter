@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, memo} from 'react';
 import s from './ValueSettings.module.css'
 
 type setValueType = {
@@ -11,8 +11,7 @@ type setValueType = {
 
 }
 
-const ValueSettings = (props: setValueType) => {
-
+const ValueSettings = memo((props: setValueType) => {
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         props.setTemporary(+e.currentTarget.value)
         props.setIdBtnDisable(false)
@@ -27,6 +26,6 @@ const ValueSettings = (props: setValueType) => {
             <input className={style} type={"number"} value={props.temporary} onChange={onChangeHandler}/>
         </div>
     );
-};
+})
 
 export default ValueSettings

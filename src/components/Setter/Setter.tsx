@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import s from './Setter.module.css'
 import SuperButton from "../SuperButton/SuperButton";
 import ValueSettings from "./ValueSettings/ValueSettings";
@@ -15,14 +15,14 @@ type SetterType = {
     setTemporaryMin: (num: number) => void
     setTemporaryMax: (num: number) => void
     setIsBtnDisable: (bool: boolean) => void
-    setHandler: () => void
+    setButtonHandler: () => void
     setAlarm: (text: string) => void
     temporaryMinError: boolean
     temporaryMaxError: boolean
 
 }
 
-const Setter = (props: SetterType) => {
+const Setter = memo((props: SetterType) => {
     return (
             <div className={s.setter}>
                 <div className={s.inputsWrapper}>
@@ -41,11 +41,11 @@ const Setter = (props: SetterType) => {
                 />
                 </div>
                 <div className={s.buttonWrapper}>
-                <SuperButton title={props.setButtonTitle} onClick={props.setHandler} isDisabled={props.isBtnAble}/>
+                <SuperButton title={props.setButtonTitle} onClick={props.setButtonHandler} isDisabled={props.isBtnAble}/>
                 </div>
             </div>
 
     );
-};
+})
 
 export default Setter;
