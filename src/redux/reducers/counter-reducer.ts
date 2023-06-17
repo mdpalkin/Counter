@@ -5,7 +5,6 @@ export const initialState = {
     alarm: "",
     temporaryMin: 0,
     temporaryMax: 5,
-    isBtnDisable: true
 }
 
 export type CounterAppType = typeof initialState
@@ -24,8 +23,6 @@ export const counterReducer = (state: CounterAppType = initialState, action: Cou
             return {...state, temporaryMin: action.payload.newTemporaryMin}
         case "SET_TEMPORARY_MAX":
             return {...state, temporaryMax: action.payload.newTemporaryMax}
-        case "SET_IS_BUTTON_DISABLE":
-            return {...state, isBtnDisable: action.payload.isButtonDisable}
         default:
             return state
     }
@@ -33,7 +30,7 @@ export const counterReducer = (state: CounterAppType = initialState, action: Cou
 
 export type CounterReducerActionType =
     SetMaxCountType | SetMinCountType | SetCurrentCountType
-    | SetAlarmType | SetTemporaryMinType | SetTemporaryMaxType | SetIsButtonDisableType
+    | SetAlarmType | SetTemporaryMinType | SetTemporaryMaxType
 
 type SetMaxCountType = ReturnType<typeof setMaxCount>
 export const setMaxCount = (newMaxCount: number) => {
@@ -80,14 +77,6 @@ export const setTemporaryMax = (newTemporaryMax: number) => {
     return {
         type: "SET_TEMPORARY_MAX",
         payload: { newTemporaryMax }
-    } as const
-}
-
-type SetIsButtonDisableType = ReturnType<typeof setIsButtonDisable>
-export const setIsButtonDisable = (isButtonDisable: boolean) => {
-    return {
-        type: "SET_IS_BUTTON_DISABLE",
-        payload: { isButtonDisable }
     } as const
 }
 

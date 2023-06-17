@@ -22,9 +22,9 @@ const Setter = memo(() => {
     const temporaryMax = useSelector<rootStateType, number>(temporaryMaxSelector)
 
     const dispatch = useDispatch()
-
-    const temporaryMinError = temporaryMin < 0 || temporaryMin >= temporaryMax
-    const temporaryMaxError = temporaryMax <= temporaryMin
+    console.log(temporaryMin, temporaryMax)
+    const temporaryMinError = temporaryMin < 0 || temporaryMin >= temporaryMax || !Number.isInteger(temporaryMin)
+    const temporaryMaxError = temporaryMax <= temporaryMin || temporaryMax > 1000000000 || !Number.isInteger(temporaryMax)
 
     const setupAlarm = useCallback((alarm: string) => {
         dispatch(setAlarm(alarm))
@@ -52,6 +52,9 @@ const Setter = memo(() => {
         dispatch(setTemporaryMax(newTemporaryMax))
     }, [dispatch])
 
+
+
+
     return (
             <div className={s.setter}>
                 <div className={s.inputsWrapper}>
@@ -60,6 +63,8 @@ const Setter = memo(() => {
                                setIdBtnDisable={setIsSetDisabled}
                                setAlarm={setupAlarm}
                                error={temporaryMaxError}
+                               conditionNumber={temporaryMin}
+
                 />
                 <ValueSettings title={"min value"}
                                temporary={temporaryMin}
@@ -67,6 +72,8 @@ const Setter = memo(() => {
                                setIdBtnDisable={setIsSetDisabled}
                                setAlarm={setupAlarm}
                                error={temporaryMinError}
+                               conditionNumber={temporaryMax}
+
                 />
                 </div>
                 <div className={s.buttonWrapper}>

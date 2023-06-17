@@ -1,56 +1,61 @@
-import { counterReducer, initialState, setMaxCount, setMinCount, setCurrentCount, setAlarm, setTemporaryMin, setTemporaryMax, setIsButtonDisable } from "./counter-reducer";
+import {
+    counterReducer,
+    initialState,
+    setMaxCount,
+    setMinCount,
+    setCurrentCount,
+    setAlarm,
+    setTemporaryMin,
+    setTemporaryMax
+} from './counter-reducer';
 
-describe("counterReducer", () => {
-    it("should return initial state", () => {
-        expect(counterReducer(undefined, {} as any)).toEqual(initialState);
+describe('counterReducer', () => {
+
+    it('should handle SET_MIN_COUNT', () => {
+        const newMinCount = 1;
+        expect(counterReducer(initialState, setMinCount(newMinCount))).toEqual({
+            ...initialState,
+            minCount: newMinCount
+        });
     });
 
-    it("should handle SET_MIN_COUNT", () => {
-        const newMinCount = 2;
-        const action = setMinCount(newMinCount);
-        const newState = counterReducer(initialState, action);
-        expect(newState.minCount).toEqual(newMinCount);
-    });
-
-    it("should handle SET_MAX_COUNT", () => {
+    it('should handle SET_MAX_COUNT', () => {
         const newMaxCount = 10;
-        const action = setMaxCount(newMaxCount);
-        const newState = counterReducer(initialState, action);
-        expect(newState.maxCount).toEqual(newMaxCount);
+        expect(counterReducer(initialState, setMaxCount(newMaxCount))).toEqual({
+            ...initialState,
+            maxCount: newMaxCount
+        });
     });
 
-    it("should handle SET_CURRENT_COUNT", () => {
+    it('should handle SET_CURRENT_COUNT', () => {
         const newCurrentCount = 3;
-        const action = setCurrentCount(newCurrentCount);
-        const newState = counterReducer(initialState, action);
-        expect(newState.currentCount).toEqual(newCurrentCount);
+        expect(counterReducer(initialState, setCurrentCount(newCurrentCount))).toEqual({
+            ...initialState,
+            currentCount: newCurrentCount
+        });
     });
 
-    it("should handle SET_ALARM", () => {
-        const newAlarm = "Alarm!";
-        const action = setAlarm(newAlarm);
-        const newState = counterReducer(initialState, action);
-        expect(newState.alarm).toEqual(newAlarm);
+    it('should handle SET_ALARM', () => {
+        const alarm = 'Time is up!';
+        expect(counterReducer(initialState, setAlarm(alarm))).toEqual({
+            ...initialState,
+            alarm
+        });
     });
 
-    it("should handle SET_TEMPORARY_MIN", () => {
-        const newTemporaryMin = 1;
-        const action = setTemporaryMin(newTemporaryMin);
-        const newState = counterReducer(initialState, action);
-        expect(newState.temporaryMin).toEqual(newTemporaryMin);
+    it('should handle SET_TEMPORARY_MIN', () => {
+        const newTemporaryMin = 2;
+        expect(counterReducer(initialState, setTemporaryMin(newTemporaryMin))).toEqual({
+            ...initialState,
+            temporaryMin: newTemporaryMin
+        });
     });
 
-    it("should handle SET_TEMPORARY_MAX", () => {
-        const newTemporaryMax = 8;
-        const action = setTemporaryMax(newTemporaryMax);
-        const newState = counterReducer(initialState, action);
-        expect(newState.temporaryMax).toEqual(newTemporaryMax);
-    });
-
-    it("should handle SET_IS_BUTTON_DISABLE", () => {
-        const isButtonDisable = false;
-        const action = setIsButtonDisable(isButtonDisable);
-        const newState = counterReducer(initialState, action);
-        expect(newState.isBtnDisable).toEqual(isButtonDisable);
+    it('should handle SET_TEMPORARY_MAX', () => {
+        const newTemporaryMax = 7;
+        expect(counterReducer(initialState, setTemporaryMax(newTemporaryMax))).toEqual({
+            ...initialState,
+            temporaryMax: newTemporaryMax
+        });
     });
 });

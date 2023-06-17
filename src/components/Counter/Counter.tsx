@@ -4,7 +4,12 @@ import SuperButton from "../SuperButton/SuperButton";
 import s from "./Counter.module.css"
 import {useDispatch, useSelector} from "react-redux";
 import {rootStateType} from "../../redux/store";
-import {alarmSelector, currentCountSelector, maxCountSelector, minCountSelector} from "../../redux/selectors";
+import {
+    alarmSelector,
+    currentCountSelector,
+    maxCountSelector,
+    minCountSelector
+} from "../../redux/selectors";
 import {setCurrentCount} from "../../redux/reducers/counter-reducer";
 
 
@@ -25,7 +30,6 @@ const Counter =  memo(() => {
         dispatch(setCurrentCount(minCount))
     }, [dispatch, minCount])
 
-    // Counter Value Control
     useEffect(() => {
         if (currentCount !== minCount || currentCount > maxCount) {
             dispatch(setCurrentCount(minCount))
