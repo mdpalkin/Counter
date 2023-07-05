@@ -6,17 +6,21 @@ const rootReducer = combineReducers({
     counter: counterReducer
 })
 
-export type rootStateType = ReturnType<typeof rootReducer>
-
-declare global {
-    interface Window {
-        __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
-    }
+// Access to data from localStorage
+let preloaderState
+const savedState = localStorage.getItem("app-state")
+if (savedState) {
+    preloaderState = JSON.parse(savedState)
 }
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+export const store = legacy_createStore(rootReducer, preloaderState);
+export type rootStateType = ReturnType<typeof rootReducer>
 
-export const store = legacy_createStore(rootReducer, composeEnhancers());
+// LocalStorage listener
+store.subscribe(() => {
+    const currentState = JSON.stringify(store.getState())
+    localStorage.setItem("app-state", currentState)
+})
 
 // @ts-ignore
 window.state = store.getState()

@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {rootStateType} from "../../redux/store";
 import {temporaryMaxSelector, temporaryMinSelector} from "../../redux/selectors";
 import {
-    setAlarm,
+    setAlarm, setCurrentCount,
     setMaxCount,
     setMinCount,
     setTemporaryMax,
@@ -22,7 +22,6 @@ const Setter = memo(() => {
     const temporaryMax = useSelector<rootStateType, number>(temporaryMaxSelector)
 
     const dispatch = useDispatch()
-    console.log(temporaryMin, temporaryMax)
     const temporaryMinError = temporaryMin < 0 || temporaryMin >= temporaryMax || !Number.isInteger(temporaryMin)
     const temporaryMaxError = temporaryMax <= temporaryMin || temporaryMax > 1000000000 || !Number.isInteger(temporaryMax)
 
@@ -42,6 +41,7 @@ const Setter = memo(() => {
         dispatch(setMinCount(temporaryMin))
         setIsSetDisabled(true)
         dispatch(setAlarm(""))
+        dispatch(setCurrentCount(temporaryMin))
     }, [dispatch, temporaryMin, temporaryMax])
 
     const setupTemporaryMin = useCallback((newTemporaryMin: number) => {

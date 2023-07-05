@@ -20,6 +20,7 @@ const Counter =  memo(() => {
     const currentCount = useSelector<rootStateType, number>(currentCountSelector)
     const alarm = useSelector<rootStateType, string>(alarmSelector)
 
+
     const dispatch = useDispatch()
 
     const increment = useCallback(() => {
@@ -31,7 +32,7 @@ const Counter =  memo(() => {
     }, [dispatch, minCount])
 
     useEffect(() => {
-        if (currentCount !== minCount || currentCount > maxCount) {
+        if (currentCount > maxCount || currentCount < minCount) {
             dispatch(setCurrentCount(minCount))
         }
     }, [dispatch, maxCount, minCount])
