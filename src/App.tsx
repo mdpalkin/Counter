@@ -7,7 +7,7 @@ function App() {
     return (
         <div className={"wrapper"}>
             <Counter/>
-            <Setter />
+            <Setter/>
         </div>
     );
 }
