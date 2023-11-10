@@ -2,14 +2,14 @@
     width: 230px;
     height: 40px;
     border-radius: 7px;
-    border: 2px rgb(152,216,233) solid;
+    border: 2px rgb(25, 118, 210) solid;
     background-color: white;
     text-align: center;
     font-size: 30px;
 }
 .numberInput:focus {
     caret-color: transparent;
-    border: 2px rgb(152,216,233) solid;
+    border: 2px rgb(25, 118, 210) solid;
 }
 
 .error {
@@ -27,7 +27,7 @@
     align-items: center;
     font-weight: 700;
     justify-content: space-between;
-    color: rgb(152,216,233);
+    color: rgb(25, 118, 210);
     font-size: 35px;
     padding: 30px 20px;
 }
